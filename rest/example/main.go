@@ -10,15 +10,14 @@ import (
 	"github.com/SKF/go-utility/v2/stages"
 )
 
-const serviceName = "user_service"
-
 func main() {
 	ctx := context.Background()
 
-	p := myProvider{token: "eyJraWQiOiJ3TktkUUtMQURMdmVoRzR5V2h0RjRHZSsyUW9Rdm1DXC9vRzdFWkU0cVI2ND0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI0Nzg0MzBiMC1hODM2LTQyZjktOWFjNS0xNDI4YzhkNmJhODUiLCJldmVudF9pZCI6IjU0NjQzZmFlLTdjZGItNGQxMS1hMGQ5LWU5ODc1ZDE2MGRiYiIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE2MTc4NjA5ODAsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC5ldS13ZXN0LTEuYW1hem9uYXdzLmNvbVwvZXUtd2VzdC0xX0RnN3BURGpXYyIsImV4cCI6MTYxNzk1MTM5NywiaWF0IjoxNjE3OTQ3Nzk3LCJqdGkiOiIyY2ExNThhMy05NDM5LTQxZDctOTFmZi1lZDZkMGZmOThmYmEiLCJjbGllbnRfaWQiOiIxOThhaXEwdXBwajBtbzZjMjh1bHZ1aWYxYiIsInVzZXJuYW1lIjoicmlja2FyZC5lbmdsdW5kQHNrZi5jb20ifQ.T1DDw9lLv4ccm-4U85laEj8bh05_FR0OJF8_8gqclZ1PVM-L-x0rXy4-JiV8jthgFnj0gba4PsDh2Yv56TKLl23VtzXhH-W6gzfc21DV4SAcYGvA1eXjzIgiAuwkr8OaNIZHdZQ3M6zF5aiRPsg-rWAOpDVzc0ixm0nbAddzS6hIud5jTJCUDCmY0NEGXhnFGeQ2gVcNPpzSxgl230EC9oWrN8aG6fy_OzjXoIBPeVSu3UqBTtzrYTddQps0cgrVzS9FmDQeDTCL9-lbg9hc1AyuuupyowM9u7JUfgMzkvIfdy1cgMQLMLF_KhTEHQUzWMe6lZaYFDiY0MvpgF-Y1w"}
+	p := myProvider{token: "<access token>"}
+
 	client := measurements.NewClient(
 		measurements.WithStage(stages.StageSandbox),
-		client.WithDatadogTracing(serviceName),
+		client.WithDatadogTracing("go-measurements-client-example"),
 		client.WithTokenProvider(&p),
 	)
 
