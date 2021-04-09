@@ -43,8 +43,7 @@ func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, conten
 	request := rest.Get("nodes/{nodeID}/node-data/recent{?content_type*}").
 		Assign("nodeID", nodeID.String()).
 		Assign("content_type", contentType).
-		SetHeader("Accept", "application/json").
-		SetHeader("Content-Type", "application/json")
+		SetHeader("Accept", "application/json")
 
 	var response models.ModelNodeDataResponse
 	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
