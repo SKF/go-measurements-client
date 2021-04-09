@@ -14,12 +14,12 @@ import (
 func main() {
 	ctx := context.Background()
 
-	p := myProvider{token: "<access token>"}
+	accessToken := "<access token>"
 
 	client := measurements.NewClient(
 		measurements.WithStage(stages.StageSandbox),
 		client.WithDatadogTracing("go-measurements-client-example"),
-		client.WithTokenProvider(&p),
+		client.WithTokenProvider(auth.RawToken(accessToken)),
 	)
 
 	contentTypes := []string{
@@ -34,12 +34,4 @@ func main() {
 	for _, nd := range nodeData.Data {
 		fmt.Printf("nd; %+v\n", nd)
 	}
-}
-
-type myProvider struct {
-	token string
-}
-
-func (p *myProvider) GetRawToken(ctx context.Context) (auth.RawToken, error) {
-	return auth.RawToken(p.token), nil
 }

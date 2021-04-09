@@ -6,7 +6,7 @@ on:
       - "v*"
 
 jobs:
-  test:
+  release:
     name: Test
     runs-on: ubuntu-latest
 
