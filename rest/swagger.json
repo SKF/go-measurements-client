@@ -8,7 +8,7 @@
         "version": "alpha"
     },
     "host": "measurement-api.sandbox.iot.enlight.skf.com",
-    "basePath": "",
+    "basePath": "/",
     "paths": {
         "/asset": {
             "get": {
@@ -1094,6 +1094,13 @@
                 "summary": "Delete Node Data",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Node ID",
+                        "name": "nodeId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "Delete Node Data Request Body",
                         "name": "body",
                         "in": "body",
@@ -1990,7 +1997,6 @@
                     "type": "string",
                     "enum": [
                         "UNKNOWN",
-                        "AUDIO_WAV",
                         "AUDIO_WAV",
                         "IMAGE_JPEG",
                         "IMAGE_PNG"

@@ -3,8 +3,8 @@ package mock
 import (
 	"context"
 
-	rest "github.com/SKF/go-hierarchy-client/rest"
-	"github.com/SKF/go-hierarchy-client/rest/models"
+	rest "github.com/SKF/go-measurements-client/rest"
+	"github.com/SKF/go-measurements-client/rest/models"
 
 	"github.com/SKF/go-utility/v2/uuid"
 	"github.com/stretchr/testify/mock"
@@ -19,8 +19,8 @@ func NewHierarchyClient() *HierarchyClientMock {
 		Mock: &mock.Mock{},
 	}
 
-	// Ensure the returned mock implements the HierarchyClient interface
-	var _ rest.HierarchyClient = client
+	// Ensure the returned mock implements the MeasurementsClient interface
+	var _ rest.MeasurementsClient = client
 
 	return client
 }
