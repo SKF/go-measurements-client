@@ -12,15 +12,6 @@ import (
 	"github.com/SKF/go-utility/v2/stages"
 )
 
-type TreeFilter struct {
-	Depth         int
-	Limit         int
-	Offset        int
-	MetadataKey   string
-	MetadataValue string
-	NodeTypes     []string
-}
-
 type MeasurementsClient interface {
 	GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentType []string) (models.ModelNodeDataResponse, error)
 }

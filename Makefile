@@ -16,8 +16,7 @@ rest/models: rest/swagger.json
 
 rest/swagger.json:
 	$(WGET) "$(API_URL)/docs/swagger/doc.json" -O "$@"
-#	./scripts/patch-skf-uuids.sh "$@"
-#	./scripts/patch-x-nullable.sh "$@"
+	./scripts/patch-skf-uuids.sh "$@"
 
 clean:
 	$(RM) -rf rest/models
