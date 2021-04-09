@@ -1,6 +1,6 @@
 module github.com/SKF/go-measurements-client/example
 
-go 1.15
+go 1.16
 
 replace github.com/SKF/go-measurements-client => ../../
 

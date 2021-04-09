@@ -1,6 +1,6 @@
 module github.com/SKF/go-measurements-client
 
-go 1.15
+go 1.16
 
 require (
 	github.com/SKF/go-rest-utility v0.2.0
