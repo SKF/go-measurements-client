@@ -1,4 +1,4 @@
-module github.com/SKF/go-hierarchy-client
+module github.com/SKF/go-measurements-client
 
 go 1.15
 

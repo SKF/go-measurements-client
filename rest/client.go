@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/SKF/go-hierarchy-client/rest/models"
+	"github.com/SKF/go-measurements-client/rest/models"
 	"github.com/SKF/go-utility/v2/uuid"
 
 	rest "github.com/SKF/go-rest-utility/client"
