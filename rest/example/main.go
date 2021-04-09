@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	measurements "github.com/SKF/go-measurements-client/rest"
+
 	"github.com/SKF/go-rest-utility/client"
 	"github.com/SKF/go-rest-utility/client/auth"
 	"github.com/SKF/go-utility/v2/stages"
@@ -24,6 +25,7 @@ func main() {
 	contentTypes := []string{
 		"DATA_POINT",
 	}
+
 	nodeData, err := client.GetNodeDataRecent(ctx, "c7e2fe61-4051-4029-8329-f733db081b89", contentTypes)
 	if err != nil {
 		panic(err)

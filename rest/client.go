@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/SKF/go-measurements-client/rest/models"
-	"github.com/SKF/go-utility/v2/uuid"
 
 	rest "github.com/SKF/go-rest-utility/client"
+	"github.com/SKF/go-utility/v2/uuid"
 
 	"github.com/SKF/go-utility/v2/stages"
 )
@@ -61,6 +61,7 @@ func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, conten
 	}
 
 	fmt.Printf("url: %v\n", url)
+
 	var response models.ModelNodeDataResponse
 	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
 		return models.ModelNodeDataResponse{}, fmt.Errorf("failed to get latest measurements: %w", err)
