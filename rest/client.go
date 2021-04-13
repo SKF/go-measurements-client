@@ -52,3 +52,16 @@ func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, conten
 
 	return response, nil
 }
+
+func (c *client) PostNodeData(ctx context.Context, nodeID uuid.UUID, nodeData models.ModelNodeDataRequest) error {
+	request := rest.Post("/node-data").
+		Assign("nodeID", nodeID.String()).
+		SetHeader("Accept", "application/json").
+		WithJSONPayload(nodeData)
+
+	if _, err := c.Do(ctx, request); err != nil {
+		return fmt.Errorf("failed to post measurement(s) measurements: %w", err)
+	}
+
+	return nil
+}
