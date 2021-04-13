@@ -14,6 +14,7 @@ import (
 
 type MeasurementsClient interface {
 	GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentType []string) (models.ModelNodeDataResponse, error)
+	PostNodeData(ctx context.Context, nodeID uuid.UUID, nodeData models.ModelNodeDataRequest) error
 }
 
 type client struct {
@@ -60,7 +61,7 @@ func (c *client) PostNodeData(ctx context.Context, nodeID uuid.UUID, nodeData mo
 		WithJSONPayload(nodeData)
 
 	if _, err := c.Do(ctx, request); err != nil {
-		return fmt.Errorf("failed to post measurement(s) measurements: %w", err)
+		return fmt.Errorf("failed to post measurement(s): %w", err)
 	}
 
 	return nil
