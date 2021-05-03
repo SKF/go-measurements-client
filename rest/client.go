@@ -68,7 +68,7 @@ func (c *client) PostNodeData(ctx context.Context, nodeData []models.ModelNodeDa
 }
 
 func (c *client) GetNodeData(ctx context.Context, measurementID uuid.UUID, excludeCoordinates bool) (models.ModelNodeData, error) {
-	request := rest.Get("/node-data/{measurementID}/{?exclude_coordinates*}").
+	request := rest.Get("/node-data/{measurementID}/{?exclude_coordinates}").
 		Assign("measurementID", measurementID.String()).
 		Assign("exclude_coordinates", strconv.FormatBool(excludeCoordinates)).
 		SetHeader("Accept", "application/json")
