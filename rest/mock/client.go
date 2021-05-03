@@ -3,9 +3,10 @@ package mock
 import (
 	"context"
 
+	"github.com/SKF/go-utility/v2/uuid"
+
 	measurements "github.com/SKF/go-measurements-client/rest"
 	"github.com/SKF/go-measurements-client/rest/models"
-	"github.com/SKF/go-utility/v2/uuid"
 
 	"github.com/stretchr/testify/mock"
 )
