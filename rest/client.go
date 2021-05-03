@@ -3,18 +3,19 @@ package gomeasurementsclient
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/SKF/go-measurements-client/rest/models"
 
 	rest "github.com/SKF/go-rest-utility/client"
-	"github.com/SKF/go-utility/v2/uuid"
-
 	"github.com/SKF/go-utility/v2/stages"
+	"github.com/SKF/go-utility/v2/uuid"
 )
 
 type MeasurementsClient interface {
 	GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentType []string) (models.ModelNodeDataResponse, error)
 	PostNodeData(ctx context.Context, nodeData []models.ModelNodeDataRequest) error
+	GetNodeData(ctx context.Context, measurementID uuid.UUID, excludeCoordinates bool) (models.ModelNodeData, error)
 }
 
 type client struct {
@@ -64,4 +65,18 @@ func (c *client) PostNodeData(ctx context.Context, nodeData []models.ModelNodeDa
 	}
 
 	return nil
+}
+
+func (c *client) GetNodeData(ctx context.Context, measurementID uuid.UUID, excludeCoordinates bool) (models.ModelNodeData, error) {
+	request := rest.Get("/node-data/{measurementID}/{?exclude_coordinates*}").
+		Assign("measurementID", measurementID.String()).
+		Assign("exclude_coordinates", strconv.FormatBool(excludeCoordinates)).
+		SetHeader("Accept", "application/json")
+
+	var response models.ModelNodeData
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return models.ModelNodeData{}, fmt.Errorf("failed to get measurement: %w", err)
+	}
+
+	return response, nil
 }
