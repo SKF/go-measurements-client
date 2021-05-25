@@ -771,7 +771,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "format": "uuid",
+                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
                         "in": "path",
@@ -869,7 +869,7 @@
                     },
                     {
                         "type": "string",
-                        "format": "uuid",
+                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
                         "in": "path",
@@ -920,7 +920,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "format": "uuid",
+                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
                         "in": "path",
@@ -1505,7 +1505,7 @@
             "properties": {
                 "assetId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "collectedAt": {
@@ -1520,7 +1520,7 @@
             "properties": {
                 "assetIDs": {
                     "type": "array",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "items": {
                         "type": "string"
                     },
@@ -1548,7 +1548,7 @@
             "properties": {
                 "assetId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "collectedAt": {
@@ -1660,7 +1660,7 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "seqNo": {
@@ -1769,7 +1769,7 @@
             "properties": {
                 "id": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "links": {
@@ -1898,7 +1898,7 @@
                 },
                 "measurementId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "ca65a74a-7dc3-11eb-9439-0242ac130002"
                 }
             }
@@ -1921,7 +1921,7 @@
                 },
                 "assetId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "collectedAt": {
@@ -1931,7 +1931,7 @@
                 },
                 "companyId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "frequency": {
@@ -1960,7 +1960,7 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "originId": {
@@ -1968,7 +1968,7 @@
                 },
                 "siteId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "updatedAt": {
@@ -2037,7 +2037,7 @@
                 "id": {
                     "description": "This is the ID of the media file",
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "tags": {
@@ -2071,7 +2071,7 @@
             "properties": {
                 "assetId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "contentType": {
@@ -2100,12 +2100,12 @@
                 },
                 "measurementId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "nodeId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "note": {
@@ -2130,7 +2130,7 @@
                 },
                 "siteId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "spectrum": {
@@ -2166,7 +2166,7 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "note": {
@@ -2249,7 +2249,7 @@
                 "id": {
                     "description": "The ID of the media, the value needs to be a valid UUID",
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "ca65a74a-7dc3-11eb-9439-0242ac130002"
                 }
             }
@@ -2334,7 +2334,7 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 }
             }

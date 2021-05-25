@@ -15,7 +15,7 @@ import (
 type MeasurementsClient interface {
 	GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentType []string) (models.ModelNodeDataResponse, error)
 	PostNodeData(ctx context.Context, nodeData []models.ModelNodeDataRequest) error
-	DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest []models.ModelDeleteNodeDataRequest) error
+	DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error
 }
 
 type client struct {
@@ -67,7 +67,7 @@ func (c *client) PostNodeData(ctx context.Context, nodeData []models.ModelNodeDa
 	return nil
 }
 
-func (c *client) DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest []models.ModelDeleteNodeDataRequest) error {
+func (c *client) DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error {
 	request := rest.Delete("nodes/{nodeID}/node-data").
 		Assign("nodeID", nodeID.String()).
 		SetHeader("Accept", "application/json").
