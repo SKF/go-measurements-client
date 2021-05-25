@@ -24,6 +24,7 @@
                     "Measurements"
                 ],
                 "summary": "Get last collected time (in RFC3339) and measurement count for a list of assets",
+                "deprecated": true,
                 "parameters": [
                     {
                         "description": "List of assets",
@@ -70,6 +71,72 @@
                 }
             }
         },
+        "/asset/{assetId}/asset-data": {
+            "delete": {
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurements"
+                ],
+                "summary": "Delete Asset Data",
+                "parameters": [
+                    {
+                        "description": "Delete Node Data Request Body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.DeleteAssetDataRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Asset ID",
+                        "name": "assetId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/asset/{assetId}/asset-data/recent": {
             "get": {
                 "security": [
@@ -77,7 +144,7 @@
                         "AccessToken": []
                     }
                 ],
-                "description": "API call to fetch asset data measurements. The result can be limited to a from/to date and",
+                "description": "API call to fetch asset data measurements. The result can be limited to a from/to date and an offset and\nlimit. Also specific content types can be filtered out. The result is returned as a list of measurements\nasset data, with the most recent asset data returned first in the list.",
                 "produces": [
                     "application/json"
                 ],
@@ -129,16 +196,12 @@
                         "in": "query"
                     },
                     {
-                        "enum": [
-                            "DATA_POINT",
-                            "NOTE",
-                            "QUESTION_ANSWERS",
-                            "SPECTRUM",
-                            "TIME_SERIES",
-                            "MISSING_VALUE"
-                        ],
-                        "type": "string",
-                        "description": "filter to only return data of the provided content type",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "filter to only return data of the provided content type. Available types: 'DATA_POINT', 'NOTE', 'QUESTION_ANSWERS', 'SPECTRUM', 'TIME_SERIES', 'MISSING_VALUE'",
                         "name": "content_type",
                         "in": "query"
                     },
@@ -242,6 +305,66 @@
                     },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/assets/search": {
+            "post": {
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ],
+                "description": "More detailed information on this endpoint and response data is available [here](/docs/service/assets-search).\n\n**Important**: This endpoint is **beta**. Do not use in production.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurements"
+                ],
+                "summary": "This endpoint can be used to retrieve metadata on a list of asset IDs",
+                "parameters": [
+                    {
+                        "description": "The request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AssetsSearchRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.AssetsSearchResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "schema": {
                             "$ref": "#/definitions/httpmodel.ErrorResponse"
                         }
@@ -637,7 +760,7 @@
                         "AccessToken": []
                     }
                 ],
-                "description": "API call to fetch node data measurement. The result is returned as a",
+                "description": "API call to fetch node data measurement. The result is returned as a measurement node data.",
                 "produces": [
                     "application/json"
                 ],
@@ -648,11 +771,25 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                        "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "enum": [
+                            "DATA_POINT",
+                            "SPECTRUM",
+                            "TIME_SERIES",
+                            "NOTE",
+                            "MISSING_VALUE",
+                            "QUESTION_ANSWERS"
+                        ],
+                        "type": "string",
+                        "description": "Content Type",
+                        "name": "contentType",
+                        "in": "query"
                     },
                     {
                         "type": "boolean",
@@ -717,8 +854,22 @@
                         }
                     },
                     {
+                        "enum": [
+                            "DATA_POINT",
+                            "SPECTRUM",
+                            "TIME_SERIES",
+                            "NOTE",
+                            "MISSING_VALUE",
+                            "QUESTION_ANSWERS"
+                        ],
                         "type": "string",
-                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                        "description": "Content Type",
+                        "name": "contentType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
                         "in": "path",
@@ -769,11 +920,25 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                        "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "enum": [
+                            "DATA_POINT",
+                            "SPECTRUM",
+                            "TIME_SERIES",
+                            "NOTE",
+                            "MISSING_VALUE",
+                            "QUESTION_ANSWERS"
+                        ],
+                        "type": "string",
+                        "description": "Content Type",
+                        "name": "contentType",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1094,13 +1259,6 @@
                 "summary": "Delete Node Data",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Node ID",
-                        "name": "nodeId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
                         "description": "Delete Node Data Request Body",
                         "name": "body",
                         "in": "body",
@@ -1108,6 +1266,13 @@
                         "schema": {
                             "$ref": "#/definitions/model.DeleteNodeDataRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Node ID",
+                        "name": "nodeId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1151,7 +1316,7 @@
                         "AccessToken": []
                     }
                 ],
-                "description": "API call to fetch node data measurements. The result can be limited to a from/to date and an offset and limit. Also a specific content type can be filtered out. The result is returned as a list of measurements node data, with the most recent node data returned first in the list.",
+                "description": "API call to fetch node data measurements. The result can be limited to a from/to date and an offset and\nlimit. Also specific content types can be filtered out. The result is returned as a list of measurements\nnode data, with the most recent node data returned first in the list.",
                 "produces": [
                     "application/json"
                 ],
@@ -1203,16 +1368,12 @@
                         "in": "query"
                     },
                     {
-                        "enum": [
-                            "DATA_POINT",
-                            "NOTE",
-                            "QUESTION_ANSWERS",
-                            "SPECTRUM",
-                            "TIME_SERIES",
-                            "MISSING_VALUE"
-                        ],
-                        "type": "string",
-                        "description": "filter to only return data of the provided content type",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "filter to only return data of the provided content type. Available types: 'DATA_POINT', 'NOTE', 'QUESTION_ANSWERS', 'SPECTRUM', 'TIME_SERIES', 'MISSING_VALUE'",
                         "name": "content_type",
                         "in": "query"
                     },
@@ -1344,18 +1505,73 @@
             "properties": {
                 "assetId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "collectedAt": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
+                }
+            }
+        },
+        "model.AssetsSearchRequest": {
+            "type": "object",
+            "properties": {
+                "assetIDs": {
+                    "type": "array",
+                    "format": "uuid",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "123e4567-e89b-12d3-a456-426614174000",
+                        "123e4567-e89b-12d3-a456-426614174001",
+                        "123e4567-e89b-12d3-a456-426614174002"
+                    ]
+                }
+            }
+        },
+        "model.AssetsSearchResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.AssetsSearchResponseData"
+                    }
+                }
+            }
+        },
+        "model.AssetsSearchResponseData": {
+            "type": "object",
+            "properties": {
+                "assetId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "collectedAt": {
+                    "type": "string",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:12.52Z"
                 },
-                "measurementCount": {
-                    "type": "integer",
-                    "format": "int64",
-                    "example": 16
+                "reason": {
+                    "$ref": "#/definitions/model.AssetsSearchResponseDataReason"
+                }
+            }
+        },
+        "model.AssetsSearchResponseDataReason": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "guarding_hazard"
                 }
             }
         },
@@ -1392,17 +1608,40 @@
                 }
             }
         },
+        "model.DeleteAssetDataRequest": {
+            "type": "object",
+            "properties": {
+                "measurementIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "123e4567-e89b-12d3-a456-426614174000",
+                        "123e4567-e89b-12d3-a456-426614174001"
+                    ]
+                },
+                "reasonForDelete": {
+                    "type": "string",
+                    "example": "deleted due to bad luck"
+                },
+                "resurrectable": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
         "model.DeleteNodeDataRequest": {
             "type": "object",
             "properties": {
                 "from": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:12.52Z"
                 },
                 "to": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:13.53Z"
                 }
             }
@@ -1416,12 +1655,12 @@
                 },
                 "createdAt": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:12.52Z"
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "seqNo": {
@@ -1460,7 +1699,7 @@
             "properties": {
                 "from": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:12.52Z"
                 },
                 "limit": {
@@ -1475,7 +1714,7 @@
                 },
                 "to": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:12.52Z"
                 }
             }
@@ -1530,7 +1769,7 @@
             "properties": {
                 "id": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "links": {
@@ -1659,7 +1898,7 @@
                 },
                 "measurementId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "ca65a74a-7dc3-11eb-9439-0242ac130002"
                 }
             }
@@ -1677,19 +1916,22 @@
         "model.MeasurementPoint": {
             "type": "object",
             "properties": {
+                "allParents": {
+                    "type": "string"
+                },
                 "assetId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "collectedAt": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:12.52Z"
                 },
                 "companyId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "frequency": {
@@ -1718,7 +1960,7 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "originId": {
@@ -1726,12 +1968,12 @@
                 },
                 "siteId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "updatedAt": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:12.52Z"
                 }
             }
@@ -1772,7 +2014,7 @@
                 },
                 "createdAt": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:12.52Z"
                 },
                 "dimensions": {
@@ -1795,7 +2037,7 @@
                 "id": {
                     "description": "This is the ID of the media file",
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "tags": {
@@ -1829,7 +2071,7 @@
             "properties": {
                 "assetId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "contentType": {
@@ -1838,7 +2080,7 @@
                 },
                 "createdAt": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:12.52Z"
                 },
                 "dataPoint": {
@@ -1858,12 +2100,12 @@
                 },
                 "measurementId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "note": {
@@ -1888,7 +2130,7 @@
                 },
                 "siteId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "spectrum": {
@@ -1913,7 +2155,7 @@
                 },
                 "createdAt": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:12.52Z"
                 },
                 "dataPoint": {
@@ -1924,7 +2166,7 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "note": {
@@ -1998,6 +2240,7 @@
                     "enum": [
                         "UNKNOWN",
                         "AUDIO_WAV",
+                        "AUDIO_MP4",
                         "IMAGE_JPEG",
                         "IMAGE_PNG"
                     ],
@@ -2006,7 +2249,7 @@
                 "id": {
                     "description": "The ID of the media, the value needs to be a valid UUID",
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "ca65a74a-7dc3-11eb-9439-0242ac130002"
                 }
             }
@@ -2076,12 +2319,12 @@
             "properties": {
                 "collectedDate": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:12.52Z"
                 },
                 "collectedMonth": {
                     "type": "string",
-                    "format": "data-time",
+                    "format": "date-time",
                     "example": "2020-01-23T13:50:12.52Z"
                 },
                 "measurementCount": {
@@ -2091,7 +2334,7 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 }
             }
