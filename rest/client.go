@@ -17,7 +17,7 @@ type MeasurementsClient interface {
 	PostNodeData(ctx context.Context, nodeData []models.ModelNodeDataRequest) error
 	DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error
 
-	GetBandOverall(ctx context.Context, nodeID uuid.UUID) (models.ModelNodeBandOverallResponse, error)
+	GetBandOverall(ctx context.Context, nodeID uuid.UUID, startFrequency, stopFrequency int64) (models.ModelNodeBandOverallResponse, error)
 }
 
 type client struct {
