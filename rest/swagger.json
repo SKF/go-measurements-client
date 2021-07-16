@@ -771,7 +771,15 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                        "x-go-type": {
+                            "type": "UUID",
+                            "import": {
+                                "package": "github.com/SKF/go-utility/v2/uuid"
+                            },
+                            "hints": {
+                                "kind": "object"
+                            }
+                        },
                         "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
@@ -870,7 +878,16 @@
                     },
                     {
                         "type": "string",
-                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                        "x-go-type": {
+                            "type": "UUID",
+                            "import": {
+                                "package": "github.com/SKF/go-utility/v2/uuid"
+                            },
+                            "hints": {
+                                "kind": "object"
+                            }
+                        },
+                        "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
                         "in": "path",
@@ -921,7 +938,15 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                        "x-go-type": {
+                            "type": "UUID",
+                            "import": {
+                                "package": "github.com/SKF/go-utility/v2/uuid"
+                            },
+                            "hints": {
+                                "kind": "object"
+                            }
+                        },
                         "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
@@ -957,6 +982,224 @@
                         "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/node-data/{measurementId}/band/overall": {
+            "get": {
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ],
+                "description": "API call to fetch overall band value. The result is returned with the measurement's creation date",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurement"
+                ],
+                "summary": "Fetch overall band value for specified Spectrum measurement",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Measurement ID",
+                        "name": "measurementId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Start Frequency",
+                        "name": "startFrequency",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "description": "Stop Frequency",
+                        "name": "stopFrequency",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "rms",
+                            "peak",
+                            "p",
+                            "ptp",
+                            "true ptp"
+                        ],
+                        "type": "string",
+                        "description": "Window Function",
+                        "name": "windowFunction",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "rectangular",
+                            "uniform",
+                            "hanning",
+                            "hamming",
+                            "flattop"
+                        ],
+                        "type": "string",
+                        "description": "Detection Type",
+                        "name": "detectionType",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.MeasurementBandOverallResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication is required.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/nodes/{nodeId}/band/overall": {
+            "get": {
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ],
+                "description": "API call to fetch overall band value for all spectrum measurements under the given node. The result is returned with each measurement's creation date.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurements"
+                ],
+                "summary": "Fetch overall band value for all spectrum measurements under given node",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Node ID",
+                        "name": "nodeId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Start Frequency",
+                        "name": "startFrequency",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "description": "Stop Frequency",
+                        "name": "stopFrequency",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "rms",
+                            "peak",
+                            "p",
+                            "ptp",
+                            "true ptp"
+                        ],
+                        "type": "string",
+                        "description": "Window Function",
+                        "name": "windowFunction",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "rectangular",
+                            "uniform",
+                            "hanning",
+                            "hamming",
+                            "flattop"
+                        ],
+                        "type": "string",
+                        "description": "Detection Type",
+                        "name": "detectionType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter to return data after a given date",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter to return data before a given date",
+                        "name": "to",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.NodeBandOverallResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication is required.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "404": {
@@ -1507,7 +1750,15 @@
             "properties": {
                 "assetId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -1526,7 +1777,15 @@
                     "format": "uuid",
                     "items": {
                         "type": "string",
-                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                        "x-go-type": {
+                            "type": "UUID",
+                            "import": {
+                                "package": "github.com/SKF/go-utility/v2/uuid"
+                            },
+                            "hints": {
+                                "kind": "object"
+                            }
+                        },
                         "format": "uuid"
                     },
                     "example": [
@@ -1553,7 +1812,15 @@
             "properties": {
                 "assetId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -1666,7 +1933,15 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -1776,7 +2051,15 @@
             "properties": {
                 "id": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -1898,6 +2181,37 @@
                 }
             }
         },
+        "model.MeasurementBandOverall": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
+                },
+                "measurementId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "overallBand": {
+                    "type": "number"
+                }
+            }
+        },
+        "model.MeasurementBandOverallResponse": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
+                },
+                "overallBand": {
+                    "type": "number"
+                }
+            }
+        },
         "model.MeasurementData": {
             "type": "object",
             "properties": {
@@ -1906,7 +2220,15 @@
                 },
                 "measurementId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "ca65a74a-7dc3-11eb-9439-0242ac130002"
                 }
@@ -1930,7 +2252,15 @@
                 },
                 "assetId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -1941,7 +2271,15 @@
                 },
                 "companyId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -1971,7 +2309,15 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -1980,7 +2326,15 @@
                 },
                 "siteId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -2050,7 +2404,15 @@
                 "id": {
                     "description": "This is the ID of the media file",
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -2080,12 +2442,31 @@
                 }
             }
         },
+        "model.NodeBandOverallResponse": {
+            "type": "object",
+            "properties": {
+                "trends": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.MeasurementBandOverall"
+                    }
+                }
+            }
+        },
         "model.NodeData": {
             "type": "object",
             "properties": {
                 "assetId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -2115,13 +2496,29 @@
                 },
                 "measurementId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -2147,7 +2544,15 @@
                 },
                 "siteId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -2184,7 +2589,15 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
@@ -2268,7 +2681,15 @@
                 "id": {
                     "description": "The ID of the media, the value needs to be a valid UUID",
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "ca65a74a-7dc3-11eb-9439-0242ac130002"
                 }
@@ -2354,9 +2775,48 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } },
+                    "x-go-type": {
+                        "type": "UUID",
+                        "import": {
+                            "package": "github.com/SKF/go-utility/v2/uuid"
+                        },
+                        "hints": {
+                            "kind": "object"
+                        }
+                    },
                     "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
+                }
+            }
+        },
+        "problems.BasicProblem": {
+            "type": "object",
+            "properties": {
+                "correlationId": {
+                    "description": "CorrelationID, an unique identifier for tracing this issue in server logs.",
+                    "type": "string"
+                },
+                "detail": {
+                    "description": "Detail, a human-readable explanation specific to this occurrence of the problem.",
+                    "type": "string"
+                },
+                "instance": {
+                    "description": "Instance, a URI reference that identifies the specific resource on which the problem occurred.",
+                    "type": "string",
+                    "format": "url"
+                },
+                "status": {
+                    "description": "Status, the HTTP status code associated with this problem occurrence.",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "Title, a short, human-readable summary of the problem type.\nThis should always be the same value for the same Type.",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "Type, a URI reference that identifies the problem type.\nWhen dereferenced this should provide human-readable documentation for the\nproblem type. When member is not present it is assumed to be \"about:blank\".",
+                    "type": "string",
+                    "format": "url"
                 }
             }
         }

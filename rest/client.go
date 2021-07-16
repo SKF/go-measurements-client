@@ -16,6 +16,8 @@ type MeasurementsClient interface {
 	GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentType []string) (models.ModelNodeDataResponse, error)
 	PostNodeData(ctx context.Context, nodeData []models.ModelNodeDataRequest) error
 	DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error
+
+	GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency int64) (models.ModelNodeBandOverallResponse, error)
 }
 
 type client struct {
@@ -78,4 +80,19 @@ func (c *client) DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNod
 	}
 
 	return nil
+}
+
+func (c *client) GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency int64) (models.ModelNodeBandOverallResponse, error) {
+	request := rest.Get("/node-data/{measurementId}/band/overall{?startFrequency,stopFrequency*}").
+		Assign("measurementId", measurementID.String()).
+		Assign("startFrequency", startFrequency).
+		Assign("stopFrequency", stopFrequency).
+		SetHeader("Accept", "application/json")
+
+	var response models.ModelNodeBandOverallResponse
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return models.ModelNodeBandOverallResponse{}, fmt.Errorf("failed to get overall band value for measurement: %w", err)
+	}
+
+	return response, nil
 }
