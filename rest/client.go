@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/SKF/go-measurements-client/rest/models"
+	"github.com/SKF/go-measurements-client/rest/workaround"
 
 	rest "github.com/SKF/go-rest-utility/client"
 	"github.com/SKF/go-utility/v2/uuid"
@@ -43,10 +44,10 @@ func NewClient(opts ...rest.Option) MeasurementsClient {
 	return &client{Client: restClient}
 }
 
-func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentType []string) (models.ModelNodeDataResponse, error) {
+func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentTypes []string) (models.ModelNodeDataResponse, error) {
 	request := rest.Get("nodes/{nodeID}/node-data/recent{?content_type*}").
 		Assign("nodeID", nodeID.String()).
-		Assign("content_type", contentType).
+		Assign("content_type", workaround.FormatContentTypes(contentTypes)).
 		SetHeader("Accept", "application/json")
 
 	var response models.ModelNodeDataResponse
