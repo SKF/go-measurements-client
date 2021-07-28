@@ -2569,7 +2569,7 @@
                     "enum": [
                         "UNKNOWN",
                         "AUDIO_WAV",
-                        "AUDIO_WAV",
+                        "AUDIO_MP4",
                         "IMAGE_JPEG",
                         "IMAGE_PNG"
                     ],
