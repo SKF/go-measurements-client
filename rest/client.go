@@ -2,6 +2,7 @@ package gomeasurementsclient
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/SKF/go-measurements-client/rest/models"
@@ -51,7 +52,11 @@ func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, conten
 		SetHeader("Accept", "application/json")
 
 	var response models.ModelNodeDataResponse
-	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+
+	err := c.DoAndUnmarshal(ctx, request, &response)
+	if errors.Is(err, rest.ErrNotFound) {
+		return models.ModelNodeDataResponse{}, ErrNotFound
+	} else if err != nil {
 		return models.ModelNodeDataResponse{}, fmt.Errorf("failed to get latest measurements: %w", err)
 	}
 
