@@ -8,7 +8,7 @@
         "version": "alpha"
     },
     "host": "measurement-api.sandbox.iot.enlight.skf.com",
-    "basePath": "",
+    "basePath": "/",
     "paths": {
         "/asset": {
             "get": {

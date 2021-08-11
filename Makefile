@@ -14,7 +14,7 @@ rest/models: rest/swagger.json
 		--volume "$(shell pwd):/src" \
 		--user "$(shell id -u):$(shell id -g)" \
 		quay.io/goswagger/swagger:v0.25.0 \
-			generate model --spec="/src/$<" --target="/src/$@/.." --skip-validation #TODO: remove this flag asap
+			generate model --spec="/src/$<" --target="/src/$@/.."
 
 rest/swagger.json:
 	$(WGET) "$(API_URL)/docs/swagger/doc.json" -O "$@"
