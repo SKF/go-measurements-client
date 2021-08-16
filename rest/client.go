@@ -53,8 +53,7 @@ func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, conten
 
 	var response models.ModelNodeDataResponse
 
-	err := c.DoAndUnmarshal(ctx, request, &response)
-	if err != nil {
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
 		return models.ModelNodeDataResponse{}, fmt.Errorf("failed to get latest measurements: %w", err)
 	}
 
