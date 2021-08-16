@@ -1,5 +1,7 @@
 package gomeasurementsclient
 
-import "fmt"
+import (
+	rest "github.com/SKF/go-rest-utility/client"
+)
 
-var ErrNotFound = fmt.Errorf("measurments returned a 404 response")
+var ErrNotFound = rest.ErrNotFound
