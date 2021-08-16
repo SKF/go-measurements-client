@@ -52,7 +52,6 @@ func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, conten
 		SetHeader("Accept", "application/json")
 
 	var response models.ModelNodeDataResponse
-
 	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
 		return models.ModelNodeDataResponse{}, fmt.Errorf("failed to get latest measurements: %w", err)
 	}
