@@ -18,6 +18,7 @@ rest/models: rest/swagger.json
 
 rest/swagger.json:
 	$(WGET) "$(API_URL)/docs/swagger/doc.json" -O "$@"
+	./rest/scripts/patch-skf-uuids.sh "$@"
 .PHONY: rest/swagger.json
 
 clean:
