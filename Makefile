@@ -6,6 +6,8 @@ WGET   ?= wget
 MKDIR  ?= mkdir
 DOCKER ?= docker
 
+generate: rest/models
+
 rest/models: rest/swagger.json
 	$(RM) -rf "$@" && $(MKDIR) -p "$@"
 	$(DOCKER) run --rm \
@@ -17,6 +19,7 @@ rest/models: rest/swagger.json
 rest/swagger.json:
 	$(WGET) "$(API_URL)/docs/swagger/doc.json" -O "$@"
 	./rest/scripts/patch-skf-uuids.sh "$@"
+.PHONY: rest/swagger.json
 
 clean:
 	$(RM) -rf rest/models

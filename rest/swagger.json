@@ -57,9 +57,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "500": {
@@ -117,9 +123,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "404": {
@@ -211,6 +223,12 @@
                         "description": "filter to exclude coordinates",
                         "name": "exclude_coordinates",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "When true, return only resurrectable measurements previously deleted",
+                        "name": "resurrectable",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -227,9 +245,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized, also returned when the given node ID doesn't exist",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "500": {
@@ -298,9 +322,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "404": {
@@ -358,15 +388,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "403": {
-                        "description": "Forbidden",
+                        "description": "The request to access the resource was denied.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "500": {
@@ -392,6 +422,7 @@
                     "Measurements"
                 ],
                 "summary": "Fetch Events",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -420,29 +451,8 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.EventsResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
-                        }
+                    "410": {
+                        "description": ""
                     }
                 }
             }
@@ -482,9 +492,15 @@
                         }
                     },
                     "401": {
-                        "description": "This error is returned if the calling user lacks access to the hierarchy node that was exported by the given export ID.",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "425": {
@@ -537,9 +553,15 @@
                         }
                     },
                     "401": {
-                        "description": "This error is returned if the calling user lacks access to the hierarchy node that is being exported by the given export ID.",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "500": {
@@ -601,9 +623,15 @@
                         }
                     },
                     "401": {
-                        "description": "This error will be returned if the calling user lacks permissions to export the given hierarchy node ID.",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "429": {
@@ -659,9 +687,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "404": {
@@ -708,8 +742,14 @@
                     },
                     {
                         "type": "string",
-                        "description": "When true, return predicted measurement IDs. Disclaimer: Because they are predicted, an ID that will never be created might be returned, if, for example, the measurement already exists.",
+                        "description": "When true, return predicted measurement IDs. Not applicable on media. Disclaimer: Because they are predicted, an ID that will never be created might be returned, if, for example, the measurement already exists.",
                         "name": "verbose",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "When true, return only resurrectable measurements previously deleted",
+                        "name": "resurrectable",
                         "in": "query"
                     }
                 ],
@@ -733,15 +773,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "403": {
-                        "description": "Forbidden",
+                        "description": "The request to access the resource was denied.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "500": {
@@ -771,16 +811,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "x-go-type": {
-                            "type": "UUID",
-                            "import": {
-                                "package": "github.com/SKF/go-utility/v2/uuid"
-                            },
-                            "hints": {
-                                "kind": "object"
-                            }
-                        },
-                        "format": "uuid",
+                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
                         "in": "path",
@@ -822,9 +853,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "404": {
@@ -878,16 +915,13 @@
                     },
                     {
                         "type": "string",
-                        "x-go-type": {
-                            "type": "UUID",
-                            "import": {
-                                "package": "github.com/SKF/go-utility/v2/uuid"
-                            },
-                            "hints": {
-                                "kind": "object"
-                            }
-                        },
-                        "format": "uuid",
+                        "description": "When true, resurrect a soft-deleted measurement",
+                        "name": "resurrect",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
                         "in": "path",
@@ -905,9 +939,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "404": {
@@ -938,16 +978,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "x-go-type": {
-                            "type": "UUID",
-                            "import": {
-                                "package": "github.com/SKF/go-utility/v2/uuid"
-                            },
-                            "hints": {
-                                "kind": "object"
-                            }
-                        },
-                        "format": "uuid",
+                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
                         "in": "path",
@@ -979,9 +1010,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "404": {
@@ -1017,7 +1054,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "format": "uuid",
+                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                         "description": "Measurement ID",
                         "name": "measurementId",
                         "in": "path",
@@ -1037,11 +1074,11 @@
                     },
                     {
                         "enum": [
-                            "rms",
-                            "peak",
-                            "p",
-                            "ptp",
-                            "true ptp"
+                            "rectangular",
+                            "uniform",
+                            "hanning",
+                            "hamming",
+                            "flattop"
                         ],
                         "type": "string",
                         "description": "Window Function",
@@ -1050,11 +1087,11 @@
                     },
                     {
                         "enum": [
-                            "rectangular",
-                            "uniform",
-                            "hanning",
-                            "hamming",
-                            "flattop"
+                            "rms",
+                            "peak",
+                            "p",
+                            "ptp",
+                            "true ptp"
                         ],
                         "type": "string",
                         "description": "Detection Type",
@@ -1120,7 +1157,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "format": "uuid",
+                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                         "description": "Node ID",
                         "name": "nodeId",
                         "in": "path",
@@ -1260,9 +1297,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "500": {
@@ -1325,9 +1368,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "404": {
@@ -1389,9 +1438,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "404": {
@@ -1468,9 +1523,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "404": {
@@ -1534,9 +1595,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "404": {
@@ -1628,6 +1695,12 @@
                         "description": "filter to exclude coordinates",
                         "name": "exclude_coordinates",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "When true, return only resurrectable measurements previously deleted",
+                        "name": "resurrectable",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1644,9 +1717,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized, also returned when the given node id doesn't exist",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "500": {
@@ -1699,9 +1778,15 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Authentication is required.",
                         "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
                         }
                     },
                     "404": {
@@ -1750,16 +1835,7 @@
             "properties": {
                 "assetId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "collectedAt": {
@@ -1774,19 +1850,8 @@
             "properties": {
                 "assetIDs": {
                     "type": "array",
-                    "format": "uuid",
                     "items": {
-                        "type": "string",
-                        "x-go-type": {
-                            "type": "UUID",
-                            "import": {
-                                "package": "github.com/SKF/go-utility/v2/uuid"
-                            },
-                            "hints": {
-                                "kind": "object"
-                            }
-                        },
-                        "format": "uuid"
+                        "type": "string"
                     },
                     "example": [
                         "123e4567-e89b-12d3-a456-426614174000",
@@ -1812,16 +1877,7 @@
             "properties": {
                 "assetId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "collectedAt": {
@@ -1919,63 +1975,6 @@
                 }
             }
         },
-        "model.Event": {
-            "type": "object",
-            "properties": {
-                "contentType": {
-                    "type": "string",
-                    "example": "DATA_POINT"
-                },
-                "createdAt": {
-                    "type": "string",
-                    "format": "date-time",
-                    "example": "2020-01-23T13:50:12.52Z"
-                },
-                "nodeId": {
-                    "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
-                    "example": "123e4567-e89b-12d3-a456-426614174000"
-                },
-                "seqNo": {
-                    "type": "string"
-                },
-                "tags": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "key",
-                        "value",
-                        "reason",
-                        "in_standby"
-                    ]
-                }
-            }
-        },
-        "model.EventsResponse": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Event"
-                    }
-                },
-                "pagination": {
-                    "$ref": "#/definitions/model.Pagination"
-                }
-            }
-        },
         "model.ExportMetadata": {
             "type": "object",
             "properties": {
@@ -2051,16 +2050,7 @@
             "properties": {
                 "id": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "links": {
@@ -2191,7 +2181,7 @@
                 },
                 "measurementId": {
                     "type": "string",
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "overallBand": {
@@ -2220,16 +2210,7 @@
                 },
                 "measurementId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "ca65a74a-7dc3-11eb-9439-0242ac130002"
                 }
             }
@@ -2252,16 +2233,7 @@
                 },
                 "assetId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "collectedAt": {
@@ -2271,16 +2243,7 @@
                 },
                 "companyId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "frequency": {
@@ -2309,33 +2272,20 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "originId": {
                     "type": "string"
                 },
+                "plantId": {
+                    "type": "string",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
                 "siteId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "updatedAt": {
@@ -2404,16 +2354,7 @@
                 "id": {
                     "description": "This is the ID of the media file",
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "tags": {
@@ -2458,16 +2399,7 @@
             "properties": {
                 "assetId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "contentType": {
@@ -2496,30 +2428,12 @@
                 },
                 "measurementId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "note": {
@@ -2544,16 +2458,7 @@
                 },
                 "siteId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "spectrum": {
@@ -2589,16 +2494,7 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "note": {
@@ -2681,16 +2577,7 @@
                 "id": {
                     "description": "The ID of the media, the value needs to be a valid UUID",
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "ca65a74a-7dc3-11eb-9439-0242ac130002"
                 }
             }
@@ -2775,16 +2662,7 @@
                 },
                 "nodeId": {
                     "type": "string",
-                    "x-go-type": {
-                        "type": "UUID",
-                        "import": {
-                            "package": "github.com/SKF/go-utility/v2/uuid"
-                        },
-                        "hints": {
-                            "kind": "object"
-                        }
-                    },
-                    "format": "uuid",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 }
             }
