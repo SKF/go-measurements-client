@@ -14,7 +14,7 @@ import (
 )
 
 type MeasurementsClient interface {
-	GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentType []string) (models.ModelNodeDataResponse, error)
+	GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentTypes []string, excludeCoordinates bool, limit int) (models.ModelNodeDataResponse, error)
 	PostNodeData(ctx context.Context, nodeData []models.ModelNodeDataRequest) error
 	DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error
 
@@ -44,10 +44,12 @@ func NewClient(opts ...rest.Option) MeasurementsClient {
 	return &client{Client: restClient}
 }
 
-func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentTypes []string) (models.ModelNodeDataResponse, error) {
-	request := rest.Get("nodes/{nodeID}/node-data/recent{?content_type*}").
+func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentTypes []string, excludeCoordinates bool, limit int) (models.ModelNodeDataResponse, error) {
+	request := rest.Get("nodes/{nodeID}/node-data/recent{?content_type*,exclude_coordinates,limit}").
 		Assign("nodeID", nodeID.String()).
 		Assign("content_type", workaround.FormatContentTypes(contentTypes)).
+		Assign("exclude_coordinates", excludeCoordinates).
+		Assign("limit", limit).
 		SetHeader("Accept", "application/json")
 
 	var response models.ModelNodeDataResponse
