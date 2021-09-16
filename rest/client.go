@@ -59,6 +59,20 @@ func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, conten
 	return response, nil
 }
 
+func (c *client) GetLastCollectedAt(ctx context.Context, nodeID uuid.UUID) (models.ModelStringResponse, error) {
+	request := rest.Get("nodes/{nodeID}/last-collected-at").
+		Assign("nodeID", nodeID.String()).
+		Assign("content_type", "application/json").
+		SetHeader("Accept", "application/json")
+
+	var response models.ModelStringResponse
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return models.ModelStringResponse{}, fmt.Errorf("failed to get last collected at: %w", err)
+	}
+
+	return response, nil
+}
+
 func (c *client) PostNodeData(ctx context.Context, nodeData []models.ModelNodeDataRequest) error {
 	request := rest.Post("/node-data").
 		SetHeader("Accept", "application/json").
