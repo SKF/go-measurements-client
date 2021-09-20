@@ -3,6 +3,7 @@ package gomeasurementsclient
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/SKF/go-measurements-client/rest/models"
 
@@ -19,7 +20,7 @@ type MeasurementsClient interface {
 
 	GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency int64) (models.ModelMeasurementBandOverallResponse, error)
 
-	GetLastCollectedAt(ctx context.Context, nodeID uuid.UUID) (models.ModelStringResponse, error)
+	GetLastCollectedAt(ctx context.Context, nodeID uuid.UUID) (*models.ModelStringResponse, error)
 }
 
 type client struct {
@@ -101,16 +102,25 @@ func (c *client) GetBandOverall(ctx context.Context, measurementID uuid.UUID, st
 	return response, nil
 }
 
-func (c *client) GetLastCollectedAt(ctx context.Context, nodeID uuid.UUID) (models.ModelStringResponse, error) {
+func (c *client) GetLastCollectedAt(ctx context.Context, nodeID uuid.UUID) (*models.ModelStringResponse, error) {
 	request := rest.Get("nodes/{nodeID}/last-collected-at").
 		Assign("nodeID", nodeID.String()).
 		Assign("content_type", "application/json").
 		SetHeader("Accept", "application/json")
 
-	var response models.ModelStringResponse
-	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
-		return models.ModelStringResponse{}, fmt.Errorf("failed to get last collected at: %w", err)
+	httpResponse, err := c.Do(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to call measurements for last collected at: %w", err)
 	}
 
-	return response, nil
+	if httpResponse.StatusCode == http.StatusNoContent {
+		return nil, nil
+	}
+
+	var response models.ModelStringResponse
+	if err := httpResponse.Unmarshal(response); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal last collected at response: %w", err)
+	}
+
+	return &response, nil
 }
