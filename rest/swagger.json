@@ -355,7 +355,7 @@
                         "AccessToken": []
                     }
                 ],
-                "description": "More detailed information on this endpoint and response data is available [here](/docs/service/assets-search).\n\n**Important**: This endpoint is **beta**. Do not use in production.",
+                "description": "More detailed information on this endpoint and response data is available [here](/docs/service/assets-search).",
                 "consumes": [
                     "application/json"
                 ],
@@ -1084,19 +1084,6 @@
                         "description": "Window Function",
                         "name": "windowFunction",
                         "in": "query"
-                    },
-                    {
-                        "enum": [
-                            "rms",
-                            "peak",
-                            "p",
-                            "ptp",
-                            "true ptp"
-                        ],
-                        "type": "string",
-                        "description": "Detection Type",
-                        "name": "detectionType",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1177,19 +1164,6 @@
                     },
                     {
                         "enum": [
-                            "rms",
-                            "peak",
-                            "p",
-                            "ptp",
-                            "true ptp"
-                        ],
-                        "type": "string",
-                        "description": "Window Function",
-                        "name": "windowFunction",
-                        "in": "query"
-                    },
-                    {
-                        "enum": [
                             "rectangular",
                             "uniform",
                             "hanning",
@@ -1197,8 +1171,8 @@
                             "flattop"
                         ],
                         "type": "string",
-                        "description": "Detection Type",
-                        "name": "detectionType",
+                        "description": "Window Function",
+                        "name": "windowFunction",
                         "in": "query"
                     },
                     {
