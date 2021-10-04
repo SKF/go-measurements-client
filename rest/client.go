@@ -18,6 +18,8 @@ type MeasurementsClient interface {
 	PostNodeData(ctx context.Context, nodeData []models.ModelNodeDataRequest) error
 	DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error
 
+	GetMeasurement(ctx context.Context, measurementID uuid.UUID) (models.ModelMeasurementResponse, error)
+
 	GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency int64) (models.ModelMeasurementBandOverallResponse, error)
 
 	GetLastCollectedAt(ctx context.Context, nodeID uuid.UUID) (*models.ModelStringResponse, error)
@@ -85,6 +87,20 @@ func (c *client) DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNod
 	}
 
 	return nil
+}
+
+func (c *client) GetMeasurement(ctx context.Context, measurementID uuid.UUID) (models.ModelMeasurementResponse, error) {
+	request := rest.Get("node-data/{measurementID}").
+		Assign("measurementID", measurementID.String).
+		SetHeader("Accept", "application/json")
+
+	var response models.ModelMeasurementResponse
+
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return models.ModelMeasurementResponse{}, fmt.Errorf("failed to get measurement: %w", err)
+	}
+
+	return response, nil
 }
 
 func (c *client) GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency int64) (models.ModelMeasurementBandOverallResponse, error) {
