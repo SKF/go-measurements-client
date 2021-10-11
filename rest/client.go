@@ -91,7 +91,7 @@ func (c *client) DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNod
 
 func (c *client) GetMeasurement(ctx context.Context, measurementID uuid.UUID) (models.ModelMeasurementResponse, error) {
 	request := rest.Get("node-data/{measurementID}").
-		Assign("measurementID", measurementID.String).
+		Assign("measurementID", measurementID.String()).
 		SetHeader("Accept", "application/json")
 
 	var response models.ModelMeasurementResponse
