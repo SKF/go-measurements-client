@@ -18,12 +18,21 @@ type MeasurementsClient interface {
 	PostNodeData(ctx context.Context, nodeData []models.ModelNodeDataRequest) error
 	DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error
 
-	GetMeasurement(ctx context.Context, measurementID uuid.UUID) (models.ModelMeasurementResponse, error)
+	GetMeasurement(ctx context.Context, measurementID uuid.UUID, contentType string, excludeCoordinates bool) (models.ModelMeasurementResponse, error)
 
 	GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency int64) (models.ModelMeasurementBandOverallResponse, error)
 
 	GetLastCollectedAt(ctx context.Context, nodeID uuid.UUID) (*models.ModelStringResponse, error)
 }
+
+const (
+	ContentTypeDataPoint       = "DATA_POINT"
+	ContentTypeSpectrum        = "SPECTRUM"
+	ContentTypeTimeSeries      = "TIME_SERIES"
+	ContentTypeNote            = "NOTE"
+	ContentTypeMissingValue    = "MISSING_VALUE"
+	ContentTypeQuestionAnswers = "QUESTION_ANSWERS"
+)
 
 type client struct {
 	*rest.Client
@@ -89,10 +98,15 @@ func (c *client) DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNod
 	return nil
 }
 
-func (c *client) GetMeasurement(ctx context.Context, measurementID uuid.UUID) (models.ModelMeasurementResponse, error) {
-	request := rest.Get("node-data/{measurementID}").
+func (c *client) GetMeasurement(ctx context.Context, measurementID uuid.UUID, contentType string, excludeCoordinates bool) (models.ModelMeasurementResponse, error) {
+	request := rest.Get("node-data/{measurementID}/{?exclude_coordinates,contentType}").
+		SetHeader("Accept", "application/json").
 		Assign("measurementID", measurementID.String()).
-		SetHeader("Accept", "application/json")
+		Assign("exclude_coordinates", excludeCoordinates)
+
+	if contentType != "" {
+		request = request.Assign("contentType", contentType)
+	}
 
 	var response models.ModelMeasurementResponse
 
