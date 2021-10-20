@@ -20,7 +20,7 @@ type MeasurementsClient interface {
 
 	GetMeasurement(ctx context.Context, measurementID uuid.UUID, contentType string, excludeCoordinates bool) (models.ModelMeasurementResponse, error)
 
-	GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency int64) (models.ModelMeasurementBandOverallResponse, error)
+	GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency float64) (models.ModelMeasurementBandOverallResponse, error)
 
 	GetLastCollectedAt(ctx context.Context, nodeID uuid.UUID) (*models.ModelStringResponse, error)
 }
@@ -117,7 +117,7 @@ func (c *client) GetMeasurement(ctx context.Context, measurementID uuid.UUID, co
 	return response, nil
 }
 
-func (c *client) GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency int64) (models.ModelMeasurementBandOverallResponse, error) {
+func (c *client) GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency float64) (models.ModelMeasurementBandOverallResponse, error) {
 	request := rest.Get("/node-data/{measurementId}/band/overall{?startFrequency,stopFrequency*}").
 		Assign("measurementId", measurementID.String()).
 		Assign("startFrequency", startFrequency).
