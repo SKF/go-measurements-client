@@ -16,6 +16,7 @@ import (
 type MeasurementsClient interface {
 	GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentTypes []string, excludeCoordinates bool, limit int) (models.ModelNodeDataResponse, error)
 	PostNodeData(ctx context.Context, nodeData []models.ModelNodeDataRequest) error
+	PostNodeDataVerbose(ctx context.Context, nodeData []models.ModelNodeDataRequest) (models.ModelIngestNodeDataResponse, error)
 	DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error
 
 	GetMeasurement(ctx context.Context, measurementID uuid.UUID, contentType string, excludeCoordinates bool) (models.ModelMeasurementResponse, error)
@@ -83,6 +84,23 @@ func (c *client) PostNodeData(ctx context.Context, nodeData []models.ModelNodeDa
 	}
 
 	return nil
+}
+
+// PostNodeDataVerbose does not guarantee that the returned measurement ID
+// exists. Do not use this functionality in production use cases.
+func (c *client) PostNodeDataVerbose(ctx context.Context, nodeData []models.ModelNodeDataRequest) (models.ModelIngestNodeDataResponse, error) {
+	request := rest.Post("/node-data{?verbose}").
+		SetHeader("Accept", "application/json").
+		Assign("verbose", "true").
+		WithJSONPayload(nodeData)
+
+	var response models.ModelIngestNodeDataResponse
+
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return models.ModelIngestNodeDataResponse{}, fmt.Errorf("failed to post measurement(s): %w", err)
+	}
+
+	return response, nil
 }
 
 func (c *client) DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error {
