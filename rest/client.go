@@ -89,7 +89,7 @@ func (c *client) PostNodeData(ctx context.Context, nodeData []models.ModelNodeDa
 // PostNodeDataVerbose does not guarantee that the returned measurement ID
 // exists. Do not use this functionality in production use cases.
 func (c *client) PostNodeDataVerbose(ctx context.Context, nodeData []models.ModelNodeDataRequest) (models.ModelIngestNodeDataResponse, error) {
-	request := rest.Post("/node-data?{verbose}").
+	request := rest.Post("/node-data{?verbose}").
 		SetHeader("Accept", "application/json").
 		Assign("verbose", "true").
 		WithJSONPayload(nodeData)
