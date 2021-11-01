@@ -117,7 +117,7 @@ func (c *client) DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNod
 }
 
 func (c *client) GetMeasurement(ctx context.Context, measurementID uuid.UUID, contentType string, excludeCoordinates bool) (models.ModelMeasurementResponse, error) {
-	request := rest.Get("node-data/{measurementID}/{?exclude_coordinates,contentType}").
+	request := rest.Get("node-data/{measurementID}{?exclude_coordinates,contentType}").
 		SetHeader("Accept", "application/json").
 		Assign("measurementID", measurementID.String()).
 		Assign("exclude_coordinates", excludeCoordinates)
