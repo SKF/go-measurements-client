@@ -26,7 +26,7 @@ func main() {
 		"DATA_POINT",
 	}
 
-	nodeData, err := client.GetNodeDataRecent(ctx, "c7e2fe61-4051-4029-8329-f733db081b89", contentTypes)
+	nodeData, err := client.GetNodeDataRecent(ctx, "c7e2fe61-4051-4029-8329-f733db081b89", contentTypes, true, 0)
 	if err != nil {
 		panic(err)
 	}
