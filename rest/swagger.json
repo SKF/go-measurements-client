@@ -355,7 +355,7 @@
                         "AccessToken": []
                     }
                 ],
-                "description": "More detailed information on this endpoint and response data is available [here](/docs/service/assets-search).\n\n**Important**: This endpoint is **beta**. Do not use in production.",
+                "description": "More detailed information on this endpoint and response data is available [here](/docs/service/assets-search).",
                 "consumes": [
                     "application/json"
                 ],
@@ -1087,15 +1087,13 @@
                     },
                     {
                         "enum": [
-                            "rms",
-                            "peak",
-                            "p",
-                            "ptp",
-                            "true ptp"
+                            0,
+                            1,
+                            2
                         ],
-                        "type": "string",
-                        "description": "Detection Type",
-                        "name": "detectionType",
+                        "type": "integer",
+                        "description": "The type of frequency specified by `startFrequency` and `stopFrequency`. `0` will be unused, `1` is used when the frequency is a fixed value, and `2` means the frequency value should be used as a multiple for the spectrum speed in Hz.",
+                        "name": "frequencyType",
                         "in": "query"
                     }
                 ],
@@ -1177,11 +1175,11 @@
                     },
                     {
                         "enum": [
-                            "rms",
-                            "peak",
-                            "p",
-                            "ptp",
-                            "true ptp"
+                            "rectangular",
+                            "uniform",
+                            "hanning",
+                            "hamming",
+                            "flattop"
                         ],
                         "type": "string",
                         "description": "Window Function",
@@ -1190,15 +1188,13 @@
                     },
                     {
                         "enum": [
-                            "rectangular",
-                            "uniform",
-                            "hanning",
-                            "hamming",
-                            "flattop"
+                            0,
+                            1,
+                            2
                         ],
-                        "type": "string",
-                        "description": "Detection Type",
-                        "name": "detectionType",
+                        "type": "integer",
+                        "description": "The type of frequency specified by `startFrequency` and `stopFrequency`. `0` will be unused, `1` is used when the frequency is a fixed value, and `2` means the frequency value should be used as a multiple for the spectrum speed in Hz.",
+                        "name": "frequencyType",
                         "in": "query"
                     },
                     {
@@ -1909,12 +1905,12 @@
             "properties": {
                 "x": {
                     "type": "number",
-                    "format": "float",
+                    "format": "double",
                     "example": 1615280620000
                 },
                 "y": {
                     "type": "number",
-                    "format": "float",
+                    "format": "double",
                     "example": 3.14159
                 }
             }
@@ -2594,7 +2590,6 @@
                 "speed": {
                     "description": "RPM",
                     "type": "number",
-                    "format": "float",
                     "example": 1600
                 },
                 "windowFunction": {
