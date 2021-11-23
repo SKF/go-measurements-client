@@ -166,7 +166,7 @@ func (c *client) GetLastCollectedAt(ctx context.Context, nodeID uuid.UUID) (*mod
 	}
 
 	var response models.ModelStringResponse
-	if err := httpResponse.Unmarshal(response); err != nil {
+	if err := httpResponse.Unmarshal(&response); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal last collected at response: %w", err)
 	}
 
