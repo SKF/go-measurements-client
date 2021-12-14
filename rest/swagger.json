@@ -2515,11 +2515,7 @@
                     "description": "A reason tag has to be included for measurements with content type MISSING_VALUE, it can be any string but\nrecommended values are unsafe_access, guarding_hazard, rotating_component_exposed, como_system_malfunction,\nnot_operating, under_maintenance, out_of_operating_regime, in_standby, no_operator_to_start_equipment,\nno_reason_set, not_monitored or out_of_service",
                     "type": "object",
                     "additionalProperties": {
-                        "type": "string"
-                    },
-                    "example": {
-                        "key": "value",
-                        "reason": "in_standby"
+                        "type": "object"
                     }
                 },
                 "timeSeries": {
