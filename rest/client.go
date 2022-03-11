@@ -20,6 +20,8 @@ type MeasurementsClient interface {
 	PostNodeDataVerbose(ctx context.Context, nodeData []models.ModelNodeDataRequest) (models.ModelIngestNodeDataResponse, error)
 	DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error
 
+	GetMeasurementPoint(ctx context.Context, nodeID uuid.UUID) (models.ModelMeasurementPoint, error)
+
 	GetMeasurement(ctx context.Context, measurementID uuid.UUID, contentType string, excludeCoordinates bool) (models.ModelMeasurementResponse, error)
 
 	GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency float64) (models.ModelMeasurementBandOverallResponse, error)
@@ -131,6 +133,20 @@ func (c *client) DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNod
 	}
 
 	return nil
+}
+
+func (c *client) GetMeasurementPoint(ctx context.Context, nodeID uuid.UUID) (models.ModelMeasurementPoint, error) {
+	request := rest.Get("measurement-point/{nodeID}").
+		SetHeader("Accept", "application/json").
+		Assign("nodeID", nodeID.String())
+
+	var response models.ModelMeasurementPoint
+
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return models.ModelMeasurementPoint{}, fmt.Errorf("failed to get measurement point: %w", err)
+	}
+
+	return response, nil
 }
 
 func (c *client) GetMeasurement(ctx context.Context, measurementID uuid.UUID, contentType string, excludeCoordinates bool) (models.ModelMeasurementResponse, error) {
