@@ -16,7 +16,7 @@ func main() {
 
 	accessToken := "<access token>"
 
-	client := measurements.NewClient(
+	measurementsClient := measurements.NewClient(
 		measurements.WithStage(stages.StageSandbox),
 		client.WithDatadogTracing("go-measurements-client-example"),
 		client.WithTokenProvider(auth.RawToken(accessToken)),
@@ -26,7 +26,7 @@ func main() {
 		"DATA_POINT",
 	}
 
-	nodeData, err := client.GetNodeDataRecent(ctx, "c7e2fe61-4051-4029-8329-f733db081b89", contentTypes, true, 0)
+	nodeData, err := measurementsClient.GetNodeDataRecent(ctx, "c7e2fe61-4051-4029-8329-f733db081b89", contentTypes, true, 0)
 	if err != nil {
 		panic(err)
 	}
