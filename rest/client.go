@@ -15,6 +15,7 @@ import (
 
 type MeasurementsClient interface {
 	GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentTypes []string, excludeCoordinates bool, limit int) (models.ModelNodeDataResponse, error)
+	GetAssetDataRecent(ctx context.Context, assetID uuid.UUID, contentTypes []string, excludeCoordinates bool, limit int) (models.ModelNodeDataResponse, error)
 	PostNodeData(ctx context.Context, nodeData []models.ModelNodeDataRequest) error
 	PostNodeDataVerbose(ctx context.Context, nodeData []models.ModelNodeDataRequest) (models.ModelIngestNodeDataResponse, error)
 	DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error
@@ -61,6 +62,22 @@ func NewClient(opts ...rest.Option) MeasurementsClient {
 func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentTypes []string, excludeCoordinates bool, limit int) (models.ModelNodeDataResponse, error) {
 	request := rest.Get("nodes/{nodeID}/node-data/recent{?content_type,exclude_coordinates,limit}").
 		Assign("nodeID", nodeID.String()).
+		Assign("content_type", contentTypes).
+		Assign("exclude_coordinates", excludeCoordinates).
+		Assign("limit", limit).
+		SetHeader("Accept", "application/json")
+
+	var response models.ModelNodeDataResponse
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return models.ModelNodeDataResponse{}, fmt.Errorf("failed to get latest measurements: %w", err)
+	}
+
+	return response, nil
+}
+
+func (c *client) GetAssetDataRecent(ctx context.Context, assetID uuid.UUID, contentTypes []string, excludeCoordinates bool, limit int) (models.ModelNodeDataResponse, error) {
+	request := rest.Get("asset/{assetID}/asset-data/recent{?content_type,exclude_coordinates,limit}").
+		Assign("assetID", assetID.String()).
 		Assign("content_type", contentTypes).
 		Assign("exclude_coordinates", excludeCoordinates).
 		Assign("limit", limit).
