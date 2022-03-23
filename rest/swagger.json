@@ -2436,6 +2436,9 @@
                     "type": "string",
                     "example": "This is a note"
                 },
+                "originMeasurementId": {
+                    "type": "string"
+                },
                 "questionAnswers": {
                     "type": "array",
                     "items": {
@@ -2496,6 +2499,9 @@
                 "note": {
                     "type": "string",
                     "example": "This is a note"
+                },
+                "originMeasurementId": {
+                    "type": "string"
                 },
                 "questionAnswers": {
                     "type": "array",
