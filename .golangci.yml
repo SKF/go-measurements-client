@@ -50,3 +50,8 @@ linters:
     - gomodguard #- Allow and block list linter for direct Go module dependencies. This is different from depguard where there are different block types for example version constraints and module recommendations.
     - nestif #- Reports deeply nested if statements
     - noctx #- Check if with context function can be used
+
+run:
+  timeout: 5m
+  skip-dirs:
+    - rest/models

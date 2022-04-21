@@ -276,7 +276,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Measurements"
+                    "Media"
                 ],
                 "summary": "Fetch all media on nodes beneath a given asset",
                 "parameters": [
@@ -419,7 +419,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Measurements"
+                    "Events"
                 ],
                 "summary": "Fetch Events",
                 "deprecated": true,
@@ -661,7 +661,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Measurements"
+                    "Measurement point"
                 ],
                 "summary": "Retrieve a measurement point",
                 "parameters": [
@@ -729,7 +729,7 @@
                 "summary": "Batch Ingest Node Data",
                 "parameters": [
                     {
-                        "description": "Rules apply to measurements with content type MISSING_VALUE, see description of tags. Additional information on the inputs can be found at [the service documentation](/docs/service)",
+                        "description": "Rules apply to measurements with content type `MISSING_VALUE`, see description of the `tags` field. Additional information regarding inputs can be found in the [service documentation](/docs/service/node-data#post-node-data).",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -1324,7 +1324,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Measurements"
+                    "Media"
                 ],
                 "summary": "Fetch all media for a given node",
                 "parameters": [
@@ -1405,7 +1405,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Measurements"
+                    "Media"
                 ],
                 "summary": "Fetch signed media upload URL for a given node",
                 "parameters": [
@@ -1472,7 +1472,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Measurements"
+                    "Media"
                 ],
                 "summary": "Fetch a Media file",
                 "parameters": [
@@ -1733,6 +1733,95 @@
                 }
             }
         },
+        "/nodes/{nodeId}/trend": {
+            "get": {
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ],
+                "description": "This end point can be used to fetch trend values for a node. Please refer to the [service documentation](/docs/service/node-data#get-node-trend-data) for more information.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurements"
+                ],
+                "summary": "Fetch trend data for a node",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Node ID",
+                        "name": "nodeId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Date of earliest measurement to return",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Date of latest measurement to return",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 0,
+                        "description": "Offset number of measurements from first measurement in time range",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "maximum": 20000,
+                        "type": "integer",
+                        "default": 20000,
+                        "description": "Limits the number of returned data points",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.NodeDataTrendResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication is required.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/usage-counter/{nodeId}": {
             "get": {
                 "security": [
@@ -1745,7 +1834,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Measurements"
+                    "Measurement point"
                 ],
                 "summary": "Retrieve the usage counter for a node",
                 "parameters": [
@@ -2518,7 +2607,7 @@
                     "$ref": "#/definitions/model.Spectrum"
                 },
                 "tags": {
-                    "description": "A reason tag has to be included for measurements with content type MISSING_VALUE, it can be any string but\nrecommended values are unsafe_access, guarding_hazard, rotating_component_exposed, como_system_malfunction,\nnot_operating, under_maintenance, out_of_operating_regime, in_standby, no_operator_to_start_equipment,\nno_reason_set, not_monitored or out_of_service",
+                    "description": "A `reason` tag is required for measurements with content type `MISSING_VALUE`. Please refer to the\n[service documentation](/docs/service/node-data#missing-value) for examples and recommended values for this tag.",
                     "type": "object",
                     "additionalProperties": {
                         "type": "object"
@@ -2526,6 +2615,11 @@
                 },
                 "timeSeries": {
                     "$ref": "#/definitions/model.TimeSeries"
+                },
+                "userId": {
+                    "type": "string",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
                 }
             }
         },
@@ -2540,6 +2634,46 @@
                 },
                 "pagination": {
                     "$ref": "#/definitions/model.Pagination"
+                }
+            }
+        },
+        "model.NodeDataTrendData": {
+            "type": "object",
+            "properties": {
+                "coordinates": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Coordinate"
+                    }
+                },
+                "nodeId": {
+                    "type": "string",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "tags": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "object"
+                    }
+                },
+                "xUnit": {
+                    "description": "xUnit describes the X unit, such as a ms (millisecond)",
+                    "type": "string",
+                    "example": "ms"
+                },
+                "yUnit": {
+                    "description": "yUnit describes the Y unit, such as acceleration enveloping peak-to-peak (gE PtP), mm/s (millimeters per second), in/s (inch per second), Celsius (°C) or Fahrenheit (°F)",
+                    "type": "string",
+                    "example": "mm/s"
+                }
+            }
+        },
+        "model.NodeDataTrendResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.NodeDataTrendData"
                 }
             }
         },
