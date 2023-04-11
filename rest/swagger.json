@@ -147,6 +147,128 @@
                         }
                     }
                 }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ],
+                "description": "This API endpoint can be used to patch data on an asset. It\nsupports a number of query parameters than can be used to\nfilter out specific data which should be updated.",
+                "consumes": [
+                    "application/json-patch+json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/problem+json"
+                ],
+                "tags": [
+                    "Measurements"
+                ],
+                "summary": "Patch asset data",
+                "parameters": [
+                    {
+                        "description": "Please refer to the [service documentation](/docs/service/asset-data#patch-asset-data) for in-depth documentation of the request body.",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Operation"
+                            }
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Asset ID",
+                        "name": "assetId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter results by tag, to look for tag 'foo' with value 'bar': ?tags[foo]=bar",
+                        "name": "tags",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Filter to patch data after a given date",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Filter to patch data before a given date",
+                        "name": "to",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Filter to only patch data of the provided content type. Available types: 'DATA_POINT', 'NOTE', 'QUESTION_ANSWERS', 'SPECTRUM', 'TIME_SERIES', 'MISSING_VALUE'",
+                        "name": "content_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                        "description": "Filter data which belongs to the given shaft on the asset",
+                        "name": "shaftId",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.NodeDataResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication is required.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "409": {
+                        "description": "The request resulted in a conflict.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.ValidationProblem"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/problems.InternalProblem"
+                        }
+                    },
+                    "503": {
+                        "description": "The request should be retried.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    }
+                }
             }
         },
         "/asset/{assetId}/asset-data/recent": {
@@ -355,7 +477,7 @@
                         "AccessToken": []
                     }
                 ],
-                "description": "More detailed information on this endpoint and response data is available [here](/docs/service/assets-search).",
+                "description": "More detailed information on this endpoint and response data is available [here](/docs/service/asset-data#get-asset-metadata).",
                 "consumes": [
                     "application/json"
                 ],
@@ -469,6 +591,7 @@
                     "Export"
                 ],
                 "summary": "Retrieves an export",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -479,41 +602,8 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ExportURL"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Authentication is required.",
-                        "schema": {
-                            "$ref": "#/definitions/problems.BasicProblem"
-                        }
-                    },
-                    "403": {
-                        "description": "The request to access the resource was denied.",
-                        "schema": {
-                            "$ref": "#/definitions/problems.BasicProblem"
-                        }
-                    },
-                    "425": {
-                        "description": "This error is returned if the requested export is not in a completed state.",
-                        "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
-                        }
+                    "410": {
+                        "description": ""
                     }
                 }
             }
@@ -530,6 +620,7 @@
                     "Export"
                 ],
                 "summary": "Fetch the status of an export",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -540,35 +631,8 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ExportStatusResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Authentication is required.",
-                        "schema": {
-                            "$ref": "#/definitions/problems.BasicProblem"
-                        }
-                    },
-                    "403": {
-                        "description": "The request to access the resource was denied.",
-                        "schema": {
-                            "$ref": "#/definitions/problems.BasicProblem"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
-                        }
+                    "410": {
+                        "description": ""
                     }
                 }
             }
@@ -591,6 +655,7 @@
                     "Export"
                 ],
                 "summary": "Trigger an export of measurement",
+                "deprecated": true,
                 "parameters": [
                     {
                         "type": "string",
@@ -610,41 +675,8 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ExportResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Authentication is required.",
-                        "schema": {
-                            "$ref": "#/definitions/problems.BasicProblem"
-                        }
-                    },
-                    "403": {
-                        "description": "The request to access the resource was denied.",
-                        "schema": {
-                            "$ref": "#/definitions/problems.BasicProblem"
-                        }
-                    },
-                    "429": {
-                        "description": "This error will be returned when there is any export currently in any running state (e.g. pending).",
-                        "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/httpmodel.ErrorResponse"
-                        }
+                    "410": {
+                        "description": ""
                     }
                 }
             }
@@ -1430,7 +1462,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.MediaMetadataResponse"
+                            "$ref": "#/definitions/model.SignedURLResponse"
                         }
                     },
                     "401": {
@@ -1615,6 +1647,121 @@
                         }
                     }
                 }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "AccessToken": []
+                    }
+                ],
+                "description": "This API endpoint can be used to patch data on a node.\nIt supports a number of query parameters than can be used\nto filter out specific data which should be patched.",
+                "consumes": [
+                    "application/json-patch+json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/problem+json"
+                ],
+                "tags": [
+                    "Measurements"
+                ],
+                "summary": "Patch node data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Node ID",
+                        "name": "nodeId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Please refer to the [service documentation](/docs/service/node-data#patch-node-data) for in-depth documentation of the request body.",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Operation"
+                            }
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter results by tag, to look for tag 'foo' with value 'bar': ?tags[foo]=bar",
+                        "name": "tags",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Filter to patch data after a given date",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Filter to patch data before a given date",
+                        "name": "to",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Filter to only patch data of the provided content type. Available types: 'DATA_POINT', 'NOTE', 'QUESTION_ANSWERS', 'SPECTRUM', 'TIME_SERIES', 'MISSING_VALUE'",
+                        "name": "content_type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.NodeDataResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httpmodel.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication is required.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "403": {
+                        "description": "The request to access the resource was denied.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    },
+                    "409": {
+                        "description": "The request resulted in a conflict.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.ValidationProblem"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/problems.InternalProblem"
+                        }
+                    },
+                    "503": {
+                        "description": "The request should be retried.",
+                        "schema": {
+                            "$ref": "#/definitions/problems.BasicProblem"
+                        }
+                    }
+                }
             }
         },
         "/nodes/{nodeId}/node-data/recent": {
@@ -1786,6 +1933,13 @@
                         "description": "Limits the number of returned data points",
                         "name": "limit",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Sets whether or not to include metadata about spectrums within the trend data range",
+                        "name": "spectrumMetadata",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1934,6 +2088,7 @@
             "type": "object",
             "properties": {
                 "assetIDs": {
+                    "description": "The list of asset IDs with a max per request of 1000",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -1943,6 +2098,12 @@
                         "123e4567-e89b-12d3-a456-426614174001",
                         "123e4567-e89b-12d3-a456-426614174002"
                     ]
+                },
+                "tags": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "object"
+                    }
                 }
             }
         },
@@ -2060,31 +2221,6 @@
                 }
             }
         },
-        "model.ExportMetadata": {
-            "type": "object",
-            "properties": {
-                "from": {
-                    "type": "string",
-                    "format": "date-time",
-                    "example": "2020-01-23T13:50:12.52Z"
-                },
-                "limit": {
-                    "type": "number",
-                    "format": "int64",
-                    "example": 50
-                },
-                "offset": {
-                    "type": "number",
-                    "format": "int64",
-                    "example": 100
-                },
-                "to": {
-                    "type": "string",
-                    "format": "date-time",
-                    "example": "2020-01-23T13:50:12.52Z"
-                }
-            }
-        },
         "model.ExportRequestBody": {
             "type": "object",
             "properties": {
@@ -2130,106 +2266,6 @@
                 }
             }
         },
-        "model.ExportResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
-                    "example": "123e4567-e89b-12d3-a456-426614174000"
-                },
-                "links": {
-                    "$ref": "#/definitions/model.ExportResponseLinks"
-                }
-            }
-        },
-        "model.ExportResponseLinks": {
-            "type": "object",
-            "properties": {
-                "self": {
-                    "type": "string",
-                    "format": "uri",
-                    "example": "https://example.com/export/123e4567-e89b-12d3-a456-426614174000"
-                },
-                "status": {
-                    "type": "string",
-                    "format": "uri",
-                    "example": "https://example.com/export/123e4567-e89b-12d3-a456-426614174000/status"
-                }
-            }
-        },
-        "model.ExportStatusResponse": {
-            "type": "object",
-            "properties": {
-                "links": {
-                    "$ref": "#/definitions/model.ExportStatusResponseLinks"
-                },
-                "metadata": {
-                    "$ref": "#/definitions/model.ExportMetadata"
-                },
-                "status": {
-                    "type": "string",
-                    "enum": [
-                        "pending",
-                        "running",
-                        "completed",
-                        "failed"
-                    ],
-                    "example": "completed"
-                }
-            }
-        },
-        "model.ExportStatusResponseLinks": {
-            "type": "object",
-            "properties": {
-                "export": {
-                    "type": "string",
-                    "format": "uri",
-                    "example": "https://example.com/export/123e4567-e89b-12d3-a456-426614174000"
-                },
-                "self": {
-                    "type": "string",
-                    "format": "uri",
-                    "example": "https://example.com/export/123e4567-e89b-12d3-a456-426614174000/status"
-                }
-            }
-        },
-        "model.ExportURL": {
-            "type": "object",
-            "properties": {
-                "expiresAt": {
-                    "type": "string",
-                    "format": "date-time",
-                    "example": "2020-11-26T10:31:19Z"
-                },
-                "links": {
-                    "$ref": "#/definitions/model.ExportURLLinks"
-                },
-                "metadata": {
-                    "$ref": "#/definitions/model.ExportMetadata"
-                },
-                "url": {
-                    "type": "string",
-                    "format": "uri",
-                    "example": "https://example.com/export/123e4567-e89b-12d3-a456-426614174000"
-                }
-            }
-        },
-        "model.ExportURLLinks": {
-            "type": "object",
-            "properties": {
-                "self": {
-                    "type": "string",
-                    "format": "uri",
-                    "example": "https://example.com/export/123e4567-e89b-12d3-a456-426614174000"
-                },
-                "status": {
-                    "type": "string",
-                    "format": "uri",
-                    "example": "https://example.com/export/123e4567-e89b-12d3-a456-426614174000/status"
-                }
-            }
-        },
         "model.IngestNodeDataResponse": {
             "type": "object",
             "properties": {
@@ -2253,6 +2289,36 @@
                         "123e4567-e89b-12d3-a456-426614174000",
                         "123e4567-e89b-12d3-a456-426614174001"
                     ]
+                }
+            }
+        },
+        "model.LastCollectedDates": {
+            "type": "object",
+            "properties": {
+                "dataPoint": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
+                },
+                "note": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
+                },
+                "questionAnswers": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
+                },
+                "spectrum": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
+                },
+                "timeSeries": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
                 }
             }
         },
@@ -2331,6 +2397,11 @@
                     "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
+                "firstCollectedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
+                },
                 "frequency": {
                     "type": "string",
                     "enum": [
@@ -2345,6 +2416,9 @@
                 },
                 "id": {
                     "type": "number"
+                },
+                "lastCollectedDates": {
+                    "$ref": "#/definitions/model.LastCollectedDates"
                 },
                 "lastDataPoint": {
                     "type": "number",
@@ -2511,6 +2585,11 @@
                     ],
                     "example": "high"
                 },
+                "insertedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
+                },
                 "measurementId": {
                     "type": "string",
                     "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
@@ -2651,6 +2730,12 @@
                     "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
+                "spectrumMetadata": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.TrendSpectrumMetadata"
+                    }
+                },
                 "tags": {
                     "type": "object",
                     "additionalProperties": {
@@ -2675,6 +2760,36 @@
                 "data": {
                     "$ref": "#/definitions/model.NodeDataTrendData"
                 }
+            }
+        },
+        "model.Operation": {
+            "type": "object",
+            "required": [
+                "op",
+                "path"
+            ],
+            "properties": {
+                "from": {
+                    "type": "string",
+                    "example": "/questionAnswers/0"
+                },
+                "op": {
+                    "type": "string",
+                    "enum": [
+                        "add",
+                        "remove",
+                        "replace",
+                        "move",
+                        "copy",
+                        "test"
+                    ],
+                    "example": "replace"
+                },
+                "path": {
+                    "type": "string",
+                    "example": "/spectrum/speed"
+                },
+                "value": {}
             }
         },
         "model.Pagination": {
@@ -2711,6 +2826,20 @@
                     "type": "string",
                     "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "ca65a74a-7dc3-11eb-9439-0242ac130002"
+                }
+            }
+        },
+        "model.SignedURLResponse": {
+            "type": "object",
+            "properties": {
+                "expiresAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
+                },
+                "url": {
+                    "type": "string",
+                    "example": "https://bucket.s3.eu-west-1.amazonaws.example.com/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Credential=CREDENTIAL%2Feu-west-1%2Fs3%2Faws4_request\u0026X-Amz-Date=20200123T135052Z\u0026X-Amz-Expires=1800\u0026X-Amz-Signature=SIGNATURE\u0026X-Amz-SignedHeaders=host"
                 }
             }
         },
@@ -2778,6 +2907,21 @@
                 }
             }
         },
+        "model.TrendSpectrumMetadata": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2020-01-23T13:50:12.52Z"
+                },
+                "measurementId": {
+                    "type": "string",
+                    "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                }
+            }
+        },
         "model.UsageCounter": {
             "type": "object",
             "properties": {
@@ -2831,6 +2975,85 @@
                     "description": "Type, a URI reference that identifies the problem type.\nWhen dereferenced this should provide human-readable documentation for the\nproblem type. When member is not present it is assumed to be \"about:blank\".",
                     "type": "string",
                     "format": "url"
+                }
+            }
+        },
+        "problems.InternalProblem": {
+            "type": "object",
+            "properties": {
+                "correlationId": {
+                    "description": "CorrelationID, an unique identifier for tracing this issue in server logs.",
+                    "type": "string"
+                },
+                "detail": {
+                    "description": "Detail, a human-readable explanation specific to this occurrence of the problem.",
+                    "type": "string"
+                },
+                "instance": {
+                    "description": "Instance, a URI reference that identifies the specific resource on which the problem occurred.",
+                    "type": "string",
+                    "format": "url"
+                },
+                "status": {
+                    "description": "Status, the HTTP status code associated with this problem occurrence.",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "Title, a short, human-readable summary of the problem type.\nThis should always be the same value for the same Type.",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "Type, a URI reference that identifies the problem type.\nWhen dereferenced this should provide human-readable documentation for the\nproblem type. When member is not present it is assumed to be \"about:blank\".",
+                    "type": "string",
+                    "format": "url"
+                }
+            }
+        },
+        "problems.ValidationProblem": {
+            "type": "object",
+            "properties": {
+                "correlationId": {
+                    "description": "CorrelationID, an unique identifier for tracing this issue in server logs.",
+                    "type": "string"
+                },
+                "detail": {
+                    "description": "Detail, a human-readable explanation specific to this occurrence of the problem.",
+                    "type": "string"
+                },
+                "instance": {
+                    "description": "Instance, a URI reference that identifies the specific resource on which the problem occurred.",
+                    "type": "string",
+                    "format": "url"
+                },
+                "reasons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/problems.ValidationReason"
+                    }
+                },
+                "status": {
+                    "description": "Status, the HTTP status code associated with this problem occurrence.",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "Title, a short, human-readable summary of the problem type.\nThis should always be the same value for the same Type.",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "Type, a URI reference that identifies the problem type.\nWhen dereferenced this should provide human-readable documentation for the\nproblem type. When member is not present it is assumed to be \"about:blank\".",
+                    "type": "string",
+                    "format": "url"
+                }
+            }
+        },
+        "problems.ValidationReason": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
                 }
             }
         }
