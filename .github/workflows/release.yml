@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    name: Test
+    name: Release
     runs-on: ubuntu-latest
 
     steps:
