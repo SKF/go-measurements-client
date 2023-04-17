@@ -3,6 +3,7 @@ package gomeasurementsclient
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/SKF/go-measurements-client/rest/models"
 
@@ -13,8 +14,29 @@ import (
 )
 
 type MeasurementsClient interface {
-	GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentType []string) (models.ModelNodeDataResponse, error)
+	GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentTypes []string, excludeCoordinates bool, limit int) (models.ModelNodeDataResponse, error)
+	GetAssetDataRecent(ctx context.Context, assetID uuid.UUID, contentTypes []string, excludeCoordinates bool, limit int) (models.ModelNodeDataResponse, error)
+	PostNodeData(ctx context.Context, nodeData []models.ModelNodeDataRequest) error
+	PostNodeDataVerbose(ctx context.Context, nodeData []models.ModelNodeDataRequest) (models.ModelIngestNodeDataResponse, error)
+	DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error
+
+	GetMeasurementPoint(ctx context.Context, nodeID uuid.UUID) (models.ModelMeasurementPoint, error)
+
+	GetMeasurement(ctx context.Context, measurementID uuid.UUID, contentType string, excludeCoordinates bool) (models.ModelMeasurementResponse, error)
+
+	GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency float64) (models.ModelMeasurementBandOverallResponse, error)
+
+	GetLastCollectedAt(ctx context.Context, nodeID uuid.UUID) (*models.ModelStringResponse, error)
 }
+
+const (
+	ContentTypeDataPoint       = "DATA_POINT"
+	ContentTypeSpectrum        = "SPECTRUM"
+	ContentTypeTimeSeries      = "TIME_SERIES"
+	ContentTypeNote            = "NOTE"
+	ContentTypeMissingValue    = "MISSING_VALUE"
+	ContentTypeQuestionAnswers = "QUESTION_ANSWERS"
+)
 
 type client struct {
 	*rest.Client
@@ -39,10 +61,12 @@ func NewClient(opts ...rest.Option) MeasurementsClient {
 	return &client{Client: restClient}
 }
 
-func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentType []string) (models.ModelNodeDataResponse, error) {
-	request := rest.Get("nodes/{nodeID}/node-data/recent{?content_type*}").
+func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, contentTypes []string, excludeCoordinates bool, limit int) (models.ModelNodeDataResponse, error) {
+	request := rest.Get("nodes/{nodeID}/node-data/recent{?content_type,exclude_coordinates,limit}").
 		Assign("nodeID", nodeID.String()).
-		Assign("content_type", contentType).
+		Assign("content_type", contentTypes).
+		Assign("exclude_coordinates", excludeCoordinates).
+		Assign("limit", limit).
 		SetHeader("Accept", "application/json")
 
 	var response models.ModelNodeDataResponse
@@ -51,4 +75,133 @@ func (c *client) GetNodeDataRecent(ctx context.Context, nodeID uuid.UUID, conten
 	}
 
 	return response, nil
+}
+
+func (c *client) GetAssetDataRecent(ctx context.Context, assetID uuid.UUID, contentTypes []string, excludeCoordinates bool, limit int) (models.ModelNodeDataResponse, error) {
+	request := rest.Get("asset/{assetID}/asset-data/recent{?content_type,exclude_coordinates,limit}").
+		Assign("assetID", assetID.String()).
+		Assign("content_type", contentTypes).
+		Assign("exclude_coordinates", excludeCoordinates).
+		Assign("limit", limit).
+		SetHeader("Accept", "application/json")
+
+	var response models.ModelNodeDataResponse
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return models.ModelNodeDataResponse{}, fmt.Errorf("failed to get latest measurements: %w", err)
+	}
+
+	return response, nil
+}
+
+func (c *client) PostNodeData(ctx context.Context, nodeData []models.ModelNodeDataRequest) error {
+	request := rest.Post("/node-data").
+		SetHeader("Accept", "application/json").
+		WithJSONPayload(nodeData)
+
+	if _, err := c.Do(ctx, request); err != nil {
+		return fmt.Errorf("failed to post measurement(s): %w", err)
+	}
+
+	return nil
+}
+
+// PostNodeDataVerbose does not guarantee that the returned measurement ID
+// exists. Do not use this functionality in production use cases.
+func (c *client) PostNodeDataVerbose(ctx context.Context, nodeData []models.ModelNodeDataRequest) (models.ModelIngestNodeDataResponse, error) {
+	request := rest.Post("/node-data{?verbose}").
+		SetHeader("Accept", "application/json").
+		Assign("verbose", "true").
+		WithJSONPayload(nodeData)
+
+	var response models.ModelIngestNodeDataResponse
+
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return models.ModelIngestNodeDataResponse{}, fmt.Errorf("failed to post measurement(s): %w", err)
+	}
+
+	return response, nil
+}
+
+func (c *client) DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error {
+	request := rest.Delete("nodes/{nodeID}/node-data").
+		Assign("nodeID", nodeID.String()).
+		SetHeader("Accept", "application/json").
+		WithJSONPayload(deleteNodeDataRequest)
+
+	if _, err := c.Do(ctx, request); err != nil {
+		return fmt.Errorf("failed to delete measurement(s): %w", err)
+	}
+
+	return nil
+}
+
+func (c *client) GetMeasurementPoint(ctx context.Context, nodeID uuid.UUID) (models.ModelMeasurementPoint, error) {
+	request := rest.Get("measurement-point/{nodeID}").
+		SetHeader("Accept", "application/json").
+		Assign("nodeID", nodeID.String())
+
+	var response models.ModelMeasurementPoint
+
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return models.ModelMeasurementPoint{}, fmt.Errorf("failed to get measurement point: %w", err)
+	}
+
+	return response, nil
+}
+
+func (c *client) GetMeasurement(ctx context.Context, measurementID uuid.UUID, contentType string, excludeCoordinates bool) (models.ModelMeasurementResponse, error) {
+	request := rest.Get("node-data/{measurementID}{?exclude_coordinates,contentType}").
+		SetHeader("Accept", "application/json").
+		Assign("measurementID", measurementID.String()).
+		Assign("exclude_coordinates", excludeCoordinates)
+
+	if contentType != "" {
+		request = request.Assign("contentType", contentType)
+	}
+
+	var response models.ModelMeasurementResponse
+
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return models.ModelMeasurementResponse{}, fmt.Errorf("failed to get measurement: %w", err)
+	}
+
+	return response, nil
+}
+
+func (c *client) GetBandOverall(ctx context.Context, measurementID uuid.UUID, startFrequency, stopFrequency float64) (models.ModelMeasurementBandOverallResponse, error) {
+	request := rest.Get("/node-data/{measurementId}/band/overall{?startFrequency,stopFrequency*}").
+		Assign("measurementId", measurementID.String()).
+		Assign("startFrequency", startFrequency).
+		Assign("stopFrequency", stopFrequency).
+		SetHeader("Accept", "application/json")
+
+	var response models.ModelMeasurementBandOverallResponse
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return models.ModelMeasurementBandOverallResponse{}, fmt.Errorf("failed to get overall band value for measurement: %w", err)
+	}
+
+	return response, nil
+}
+
+func (c *client) GetLastCollectedAt(ctx context.Context, nodeID uuid.UUID) (*models.ModelStringResponse, error) {
+	request := rest.Get("nodes/{nodeID}/last-collected-at").
+		Assign("nodeID", nodeID.String()).
+		Assign("content_type", "application/json").
+		SetHeader("Accept", "application/json")
+
+	httpResponse, err := c.Do(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to call measurements for last collected at: %w", err)
+	}
+
+	if httpResponse.StatusCode == http.StatusNoContent {
+		return nil, nil
+	}
+
+	var response models.ModelStringResponse
+	if err := httpResponse.Unmarshal(&response); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal last collected at response: %w", err)
+	}
+
+	return &response, nil
 }
