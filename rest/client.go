@@ -21,6 +21,7 @@ type MeasurementsClient interface {
 	DeleteNodeData(ctx context.Context, nodeID uuid.UUID, deleteNodeDataRequest models.ModelDeleteNodeDataRequest) error
 
 	GetMeasurementPoint(ctx context.Context, nodeID uuid.UUID) (models.ModelMeasurementPoint, error)
+	GetUsageCounters(ctx context.Context, nodeID uuid.UUID) ([]models.ModelUsageCounter, error)
 
 	GetMeasurement(ctx context.Context, measurementID uuid.UUID, contentType string, excludeCoordinates bool) (models.ModelMeasurementResponse, error)
 
@@ -144,6 +145,20 @@ func (c *client) GetMeasurementPoint(ctx context.Context, nodeID uuid.UUID) (mod
 
 	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
 		return models.ModelMeasurementPoint{}, fmt.Errorf("failed to get measurement point: %w", err)
+	}
+
+	return response, nil
+}
+
+func (c *client) GetUsageCounters(ctx context.Context, nodeID uuid.UUID) ([]models.ModelUsageCounter, error) {
+	request := rest.Get("usage-counter/{nodeID}").
+		SetHeader("Accept", "application/json").
+		Assign("nodeID", nodeID.String())
+
+	var response []models.ModelUsageCounter
+
+	if err := c.DoAndUnmarshal(ctx, request, &response); err != nil {
+		return nil, fmt.Errorf("failed to get usage counters: %w", err)
 	}
 
 	return response, nil
