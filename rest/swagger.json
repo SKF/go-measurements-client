@@ -2494,24 +2494,9 @@
                     "example": "2020-01-23T13:50:12.52Z"
                 },
                 "dimensions": {
-                    "type": "object",
-                    "properties": {
-                        "height": {
-                            "type": "integer",
-                            "example": 512
-                        },
-                        "ratio": {
-                            "type": "number",
-                            "example": 1.0277777777777777
-                        },
-                        "width": {
-                            "type": "integer",
-                            "example": 256
-                        }
-                    }
+                    "$ref": "#/definitions/model.MediaMetadataDimensions"
                 },
                 "id": {
-                    "description": "This is the ID of the media file",
                     "type": "string",
                     "x-go-type": { "type": "UUID", "import": { "package": "github.com/SKF/go-utility/v2/uuid" }, "hints": { "kind": "object" } }, "format": "uuid",
                     "example": "123e4567-e89b-12d3-a456-426614174000"
@@ -2525,6 +2510,23 @@
                         "tag_key",
                         "its_value"
                     ]
+                }
+            }
+        },
+        "model.MediaMetadataDimensions": {
+            "type": "object",
+            "properties": {
+                "height": {
+                    "type": "integer",
+                    "example": 512
+                },
+                "ratio": {
+                    "type": "number",
+                    "example": 1.0277777777777777
+                },
+                "width": {
+                    "type": "integer",
+                    "example": 256
                 }
             }
         },
